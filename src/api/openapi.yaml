@@ -1,0 +1,766 @@
+openapi: 3.0.0
+info:
+  contact:
+    email: hendrik.lankers.hl@googlemail.com
+  description: This is the api for the FerryTix Passenger Ferry Ticketing System,
+    that is both accessible to the vending machines and to other clients.
+  title: FerryTix
+  version: 1.0.0
+servers:
+- url: /
+paths:
+  /machines:
+    get:
+      description: list all active vending machines
+      operationId: machinesGET
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/VendingMachine'
+                type: array
+          description: vending machines listed
+      x-eov-operation-handler: controllers/DefaultController
+  /machines/{uuid}:
+    get:
+      description: returns a single vending machine
+      operationId: machinesUuidGET
+      parameters:
+      - explode: false
+        in: path
+        name: uuid
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VendingMachine'
+          description: vending machine found
+        "400":
+          description: invalid id
+        "404":
+          description: no machine with given uuid found
+      x-eov-operation-handler: controllers/DefaultController
+  /machines/{uuid}/replacePaperRoll:
+    post:
+      description: Replace receipt paper roll.
+      operationId: machinesUuidReplacePaperRollPOST
+      parameters:
+      - explode: false
+        in: path
+        name: uuid
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: integer
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MachineStatus'
+          description: Reset Paper fill level.
+        "400":
+          description: invalid id
+        "404":
+          description: no machine with given uuid found
+      x-eov-operation-handler: controllers/DefaultController
+  /machines/{uuid}/status:
+    get:
+      description: Returns a single vending machine's status.
+      operationId: machinesUuidStatusGET
+      parameters:
+      - explode: false
+        in: path
+        name: uuid
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MachineStatus'
+          description: vending machine found
+        "400":
+          description: invalid id
+        "404":
+          description: no machine with given uuid found
+      x-eov-operation-handler: controllers/DefaultController
+    patch:
+      description: Update machine status manually.
+      operationId: machinesUuidStatusPATCH
+      parameters:
+      - explode: false
+        in: path
+        name: uuid
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MachineStatus'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MachineStatus'
+          description: Updated config of machine.
+        "404":
+          description: no machine with given uuid found
+      x-eov-operation-handler: controllers/DefaultController
+  /machines/{uuid}/commands:
+    get:
+      description: Retrieve a command for a vending machine with the given id. May
+        return after an undefined timeout
+      operationId: machinesUuidCommandsGET
+      parameters:
+      - explode: false
+        in: path
+        name: uuid
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MachineCommand'
+          description: command found
+        "400":
+          description: invalid id
+        "404":
+          description: no machine with given uuid found
+      x-eov-operation-handler: controllers/DefaultController
+    post:
+      description: Execute a command on a single vending machine.
+      operationId: machinesUuidCommandsPOST
+      parameters:
+      - explode: false
+        in: path
+        name: uuid
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MachineCommand'
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MachineStatus'
+          description: Sent command to machine.
+        "400":
+          description: invalid id
+        "404":
+          description: no machine with given uuid found
+      x-eov-operation-handler: controllers/DefaultController
+  /machines/defaultConfig:
+    patch:
+      description: Change the default configuration for all vending machines.
+      operationId: machinesDefaultConfigPATCH
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MachineConfiguration'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MachineConfiguration'
+          description: Updated default config of all machines.
+      x-eov-operation-handler: controllers/DefaultController
+  /machines/{uuid}/config:
+    patch:
+      description: Change the configuration of a vending machine.
+      operationId: machinesUuidConfigPATCH
+      parameters:
+      - explode: false
+        in: path
+        name: uuid
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MachineConfiguration'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MachineConfiguration'
+          description: Updated config of machine.
+        "404":
+          description: no machine with supplied uuid found
+      x-eov-operation-handler: controllers/DefaultController
+  /faehrCard/{uuid}:
+    get:
+      description: Return full details on a single FaehrCard.
+      operationId: faehrCardUuidGET
+      parameters:
+      - explode: false
+        in: path
+        name: uuid
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FaehrCard'
+          description: faehr card found
+        "400":
+          description: invalid id
+        "404":
+          description: no FaehrCard with given uuid found
+      x-eov-operation-handler: controllers/DefaultController
+  /faehrCard/{uuid}/balance:
+    get:
+      description: Return a FaehrCard's balance.
+      operationId: faehrCardUuidBalanceGET
+      parameters:
+      - explode: false
+        in: path
+        name: uuid
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+          description: faehr card found
+        "400":
+          description: invalid id
+        "404":
+          description: no FaehrCard with given uuid found
+      x-eov-operation-handler: controllers/DefaultController
+  /faehrCard/{uuid}/topup:
+    post:
+      description: Top up a FaehrCard's balance.
+      operationId: faehrCardUuidTopupPOST
+      parameters:
+      - explode: false
+        in: path
+        name: uuid
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TopUp'
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_201'
+          description: faehr card topped up
+        "400":
+          description: invalid id
+        "404":
+          description: no FaehrCard with given uuid found
+      x-eov-operation-handler: controllers/DefaultController
+  /ticketSales:
+    post:
+      description: Add a ticket sale.
+      operationId: ticketSalesPOST
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TicketSale'
+        required: true
+      responses:
+        "201":
+          description: The ticket sale has been recorded, if applicable, payment methods
+            have been charged
+      x-eov-operation-handler: controllers/DefaultController
+  /ticketSales/{uuid}/invalidateReturn:
+    delete:
+      description: Invalidate a return ticket.
+      operationId: ticketSalesUuidInvalidateReturnDELETE
+      parameters:
+      - explode: false
+        in: path
+        name: uuid
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: The return ticket has been invalidated.
+        "402":
+          description: The ticket with the uuid was found, but it isn't a valid return
+            ticket.
+        "404":
+          description: No Ticket with the supplied uuid has been found.
+      x-eov-operation-handler: controllers/DefaultController
+components:
+  schemas:
+    PaymentMethod:
+      oneOf:
+      - $ref: '#/components/schemas/FaehrCardPayment'
+      - $ref: '#/components/schemas/CashPayment'
+      - $ref: '#/components/schemas/ECCardPayment'
+      - $ref: '#/components/schemas/BankTransferPayment'
+      - $ref: '#/components/schemas/PayPalPayment'
+    FaehrCardPayment:
+      description: Payment Details for FaehrCard Payments.
+      properties:
+        uuid:
+          description: UUID of the FaehrCard charged.
+          format: uuid
+          type: string
+      type: object
+    CashPayment:
+      description: Payment Details for Cash Payments.
+      properties:
+        denominations:
+          description: List of coins and bills the payment consists of.
+          items:
+            type: integer
+          type: array
+        change:
+          description: List of coins and bills the change consists of.
+          items:
+            type: integer
+          type: array
+      type: object
+    ECCardPayment:
+      properties:
+        name:
+          type: string
+      type: object
+    BankTransferPayment:
+      properties:
+        name:
+          type: string
+      type: object
+    PayPalPayment:
+      properties:
+        name:
+          type: string
+      type: object
+    Payment:
+      description: A payment for a ticket sale.
+      example:
+        amount: 1
+        uuid: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        uuid:
+          format: uuid
+          type: string
+        amount:
+          type: integer
+        method:
+          $ref: '#/components/schemas/PaymentMethod'
+      type: object
+    TicketSale:
+      description: A collection of tickets that are paid and used at once.
+      example:
+        signature: signature
+        issuedBy: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        payment:
+          amount: 1
+          uuid: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        positions:
+        - fare:
+            fare: 5
+            ticketClass:
+              bicycle: true
+              reduced: true
+              staff: true
+              return: true
+          count: 0
+        - fare:
+            fare: 5
+            ticketClass:
+              bicycle: true
+              reduced: true
+              staff: true
+              return: true
+          count: 0
+        issuedAt: 2000-01-23T04:56:07.000+00:00
+        uuid: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        returnValid: true
+      properties:
+        uuid:
+          format: uuid
+          type: string
+        issuedBy:
+          format: uuid
+          type: string
+        issuedAt:
+          format: date-time
+          type: string
+        returnValid:
+          nullable: true
+          type: boolean
+        from:
+          $ref: '#/components/schemas/MachineLocation'
+        payment:
+          $ref: '#/components/schemas/Payment'
+        positions:
+          items:
+            $ref: '#/components/schemas/Position'
+          type: array
+        signature:
+          type: string
+      type: object
+    Position:
+      example:
+        fare:
+          fare: 5
+          ticketClass:
+            bicycle: true
+            reduced: true
+            staff: true
+            return: true
+        count: 0
+      properties:
+        fare:
+          $ref: '#/components/schemas/Fare'
+        count:
+          type: integer
+      type: object
+    TicketClass:
+      example:
+        bicycle: true
+        reduced: true
+        staff: true
+        return: true
+      properties:
+        bicycle:
+          description: whether or not a bicycle was carried
+          type: boolean
+        return:
+          description: whether or not a return trip has been purchased
+          type: boolean
+        reduced:
+          description: reduced fare for physically disabled persons and children under
+            the age of 14
+          type: boolean
+        staff:
+          description: only for staff members
+          type: boolean
+      type: object
+    TopUp:
+      example:
+        amount: 0
+        initial: true
+        signature: signature
+        issuedBy: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        for: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        paid: 6
+        payment:
+          amount: 1
+          uuid: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        issuedAt: 2000-01-23T04:56:07.000+00:00
+        uuid: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        uuid:
+          format: uuid
+          type: string
+        for:
+          description: UUID of the FaehrCard the TopUp is for.
+          format: uuid
+          type: string
+        issuedAt:
+          format: date-time
+          type: string
+        issuedBy:
+          description: The id of the vending machine that the topup has been purchased
+            at. Is null if purchased online
+          format: uuid
+          type: string
+        amount:
+          type: integer
+        paid:
+          type: integer
+        payment:
+          $ref: '#/components/schemas/Payment'
+        initial:
+          description: Describes whether the top up was done when the card was issued
+          type: boolean
+        signature:
+          type: string
+      type: object
+    StaffMember:
+      description: Staff members work for the ferry and are granted free rides.
+      properties:
+        uuid:
+          format: uuid
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        role:
+          $ref: '#/components/schemas/StaffRole'
+      type: object
+    StaffRole:
+      enum:
+      - Admin
+      - Captain
+      - Cashier
+      - other
+      type: string
+    FaehrCard:
+      example:
+        balance: 0
+        issuedBy: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        issuedAt: 2000-01-23T04:56:07.000+00:00
+        uuid: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        ownedBy: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        uuid:
+          format: uuid
+          type: string
+        ownedBy:
+          format: uuid
+          nullable: true
+          type: string
+        balance:
+          type: integer
+        issuedAt:
+          format: date-time
+          type: string
+        issuedBy:
+          format: uuid
+          nullable: true
+          type: string
+      type: object
+    MachineConfiguration:
+      description: Object to hold configuration for vending machines, data that can
+        be changed by admins
+      example:
+        forMachine: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        maxPassengersTolerance: 5
+        maxBicycles: 0
+        maxBicyclesTolerance: 6
+        maxPassengers: 1
+        fares:
+        - fare: 5
+          ticketClass:
+            bicycle: true
+            reduced: true
+            staff: true
+            return: true
+        - fare: 5
+          ticketClass:
+            bicycle: true
+            reduced: true
+            staff: true
+            return: true
+      properties:
+        forMachine:
+          description: The machine id for which to apply these settings. May be left
+            empty in a POST request if applicable for all machines.
+          format: uuid
+          type: string
+        maxBicycles:
+          type: integer
+        maxBicyclesTolerance:
+          description: Tolerance fot the maximal amount of passengers carrying a bicycle
+            in the waiting area. This will determine, to what extend the maximum may
+            be exceeded in some situations.
+          type: integer
+        maxPassengers:
+          type: integer
+        maxPassengersTolerance:
+          description: Tolerance fot the maximal amount of passengers in the waiting
+            area. This will determine, to what extend the maximum may be exceeded
+            in some situations.
+          type: integer
+        fares:
+          items:
+            $ref: '#/components/schemas/Fare'
+          type: array
+      type: object
+    Fare:
+      description: The price that tickets of a given ticket class are sold for (in
+        cents)
+      example:
+        fare: 5
+        ticketClass:
+          bicycle: true
+          reduced: true
+          staff: true
+          return: true
+      properties:
+        ticketClass:
+          $ref: '#/components/schemas/TicketClass'
+        fare:
+          type: integer
+      type: object
+    MachineCommand:
+      description: An order issued by an admin for a machine to perform an action
+      enum:
+      - setSignalRed
+      - setSignalGreen
+      - stopVending
+      - startVending
+      type: string
+    MachineLocation:
+      enum:
+      - Bislich
+      - Xanten
+      type: string
+    VendingMachine:
+      example:
+        publicKey: publicKey
+        uuid: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        uuid:
+          format: uuid
+          type: string
+        publicKey:
+          type: string
+        location:
+          $ref: '#/components/schemas/MachineLocation'
+      type: object
+    MachineStatus:
+      description: The status of a machine, generated partly by the backend
+      example:
+        cpuTemperature: 6.027456183070403
+        receiptPaperRollLength: 50
+        waiting:
+        - waitingSince: 2000-01-23T04:56:07.000+00:00
+          ticketClass:
+            bicycle: true
+            reduced: true
+            staff: true
+            return: true
+        - waitingSince: 2000-01-23T04:56:07.000+00:00
+          ticketClass:
+            bicycle: true
+            reduced: true
+            staff: true
+            return: true
+        batteryCharge: 0.8008281904610115
+        ticketsSoldToday:
+          withBicycle: 1
+          withoutBicycle: 5
+        vending: true
+        volumeOfSalesToday: 5
+        estimatedReceiptPaperFillLevel: 0.98
+      properties:
+        vending:
+          type: boolean
+        batteryCharge:
+          type: number
+        estimatedReceiptPaperFillLevel:
+          example: 0.98
+          type: number
+        receiptPaperRollLength:
+          example: 50
+          type: integer
+        cpuTemperature:
+          type: number
+        ticketsSoldToday:
+          $ref: '#/components/schemas/MachineStatus_ticketsSoldToday'
+        volumeOfSalesToday:
+          type: integer
+        waiting:
+          items:
+            $ref: '#/components/schemas/WaitingPassenger'
+          type: array
+      type: object
+    WaitingPassenger:
+      description: A passenger waiting in the waiting area
+      example:
+        waitingSince: 2000-01-23T04:56:07.000+00:00
+        ticketClass:
+          bicycle: true
+          reduced: true
+          staff: true
+          return: true
+      properties:
+        ticketClass:
+          $ref: '#/components/schemas/TicketClass'
+        waitingSince:
+          format: date-time
+          type: string
+      type: object
+    inline_response_200:
+      example:
+        balance: 0
+      properties:
+        balance:
+          type: integer
+      type: object
+    inline_response_201:
+      example:
+        newbalance: 0
+      properties:
+        newbalance:
+          type: integer
+      type: object
+    MachineStatus_ticketsSoldToday:
+      example:
+        withBicycle: 1
+        withoutBicycle: 5
+      properties:
+        withBicycle:
+          type: integer
+        withoutBicycle:
+          type: integer
+      type: object

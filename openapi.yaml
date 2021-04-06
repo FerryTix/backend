@@ -1,0 +1,571 @@
+openapi: "3.0.0"
+info:
+  description: "This is the api for the FerryTix Passenger Ferry Ticketing System, that is both accessible to the vending machines and to other clients."
+  version: "1.0.0"
+  title: "FerryTix"
+  contact:
+    email: "hendrik.lankers.hl@googlemail.com"
+  license:
+    name: "GNU General Public License V3"
+    url: "https://www.gnu.org/licenses/gpl-3.0.en.html"
+paths:
+  /machines:
+    get:
+      description: "list all active vending machines"
+      responses:
+        200:
+          description: "vending machines listed"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/VendingMachine"
+  /machines/{uuid}:
+    get:
+      description: "returns a single vending machine"
+      parameters:
+        - name: "uuid"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+            format: "uuid"
+      responses:
+        200:
+          description: "vending machine found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VendingMachine"
+        400:
+          description: "invalid id"
+        404:
+          description: "no machine with given uuid found"
+  /machines/{uuid}/replacePaperRoll:
+    post:
+      description: "Replace receipt paper roll."
+      parameters:
+        - name: "uuid"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+            format: "uuid"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: "integer"
+      responses:
+        201:
+          description: "Reset Paper fill level."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MachineStatus"
+        400:
+          description: "invalid id"
+        404:
+          description: "no machine with given uuid found"
+  /machines/{uuid}/status:
+    get:
+      description: "Returns a single vending machine's status."
+      parameters:
+        - name: "uuid"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+            format: "uuid"
+      responses:
+        200:
+          description: "vending machine found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MachineStatus"
+        400:
+          description: "invalid id"
+        404:
+          description: "no machine with given uuid found"
+    patch:
+      description: "Update machine status manually."
+      parameters:
+        - name: "uuid"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+            format: "uuid"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MachineStatus"
+      responses:
+        200:
+          description: "Updated config of machine."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MachineStatus"
+        404:
+          description: "no machine with given uuid found"
+  /machines/{uuid}/commands:
+    get:
+      description: "Retrieve a command for a vending machine with the given id. May return after an undefined timeout"
+      parameters:
+        - name: "uuid"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+            format: "uuid"
+      responses:
+        200:
+          description: "command found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MachineCommand"
+        400:
+          description: "invalid id"
+        404:
+          description: "no machine with given uuid found"
+    post:
+      description: "Execute a command on a single vending machine."
+      parameters:
+        - name: "uuid"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+            format: "uuid"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MachineCommand"
+      responses:
+        201:
+          description: "Sent command to machine."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MachineStatus"
+        400:
+          description: "invalid id"
+        404:
+          description: "no machine with given uuid found"
+  /machines/defaultConfig:
+    patch:
+      description: "Change the default configuration for all vending machines."
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MachineConfiguration"
+      responses:
+        200:
+          description: "Updated default config of all machines."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MachineConfiguration"
+  /machines/{uuid}/config:
+    patch:
+      description: "Change the configuration of a vending machine."
+      parameters:
+        - name: "uuid"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+            format: "uuid"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MachineConfiguration"
+      responses:
+        200:
+          description: "Updated config of machine."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MachineConfiguration"
+        404:
+          description: "no machine with supplied uuid found"
+  /faehrCard/{uuid}:
+    get:
+      description: "Return full details on a single FaehrCard."
+      parameters:
+        - name: "uuid"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+            format: "uuid"
+      responses:
+        200:
+          description: "faehr card found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FaehrCard"
+        400:
+          description: "invalid id"
+        404:
+          description: "no FaehrCard with given uuid found"
+  /faehrCard/{uuid}/balance:
+    get:
+      description: "Return a FaehrCard's balance."
+      parameters:
+        - name: "uuid"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+            format: "uuid"
+      responses:
+        200:
+          description: "faehr card found"
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  balance:
+                    type: "integer"
+        400:
+          description: "invalid id"
+        404:
+          description: "no FaehrCard with given uuid found"
+  /faehrCard/{uuid}/topup:
+    post:
+      description: "Top up a FaehrCard's balance."
+      parameters:
+        - name: "uuid"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+            format: "uuid"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TopUp"
+      responses:
+        201:
+          description: "faehr card topped up"
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  newbalance:
+                    type: "integer"
+        400:
+          description: "invalid id"
+        404:
+          description: "no FaehrCard with given uuid found"
+  /ticketSales:
+    post:
+      description: "Add a ticket sale."
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TicketSale"
+      responses:
+        201:
+          description: "The ticket sale has been recorded, if applicable, payment methods have been charged"
+  /ticketSales/{uuid}/invalidateReturn:
+    delete:
+      description: "Invalidate a return ticket."
+      parameters:
+        - name: "uuid"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+            format: "uuid"
+      responses:
+        204:
+          description: "The return ticket has been invalidated."
+        402:
+          description: "The ticket with the uuid was found, but it isn't a valid return ticket."
+        404:
+          description: "No Ticket with the supplied uuid has been found."
+components:
+  schemas:
+    PaymentMethod:
+      oneOf:
+        - $ref: "#/components/schemas/FaehrCardPayment"
+        - $ref: "#/components/schemas/CashPayment"
+        - $ref: "#/components/schemas/ECCardPayment"
+        - $ref: "#/components/schemas/BankTransferPayment"
+        - $ref: "#/components/schemas/PayPalPayment"
+    FaehrCardPayment:
+      description: "Payment Details for FaehrCard Payments."
+      type: "object"
+      properties:
+        uuid:
+          description: "UUID of the FaehrCard charged."
+          type: "string"
+          format: "uuid"
+    CashPayment:
+      description: "Payment Details for Cash Payments."
+      type: "object"
+      properties:
+        denominations:
+          description: "List of coins and bills the payment consists of."
+          type: "array"
+          items:
+            type: "integer"
+        change:
+          description: "List of coins and bills the change consists of."
+          type: "array"
+          items:
+            type: "integer"
+    ECCardPayment:
+      type: "object"
+      properties:
+        name:
+          type: "string"
+    BankTransferPayment:
+      type: "object"
+      properties:
+        name:
+          type: "string"
+    PayPalPayment:
+      type: "object"
+      properties:
+        name:
+          type: "string"
+    Payment:
+      description: "A payment for a ticket sale."
+      type: "object"
+      properties:
+        uuid:
+          type: "string"
+          format: "uuid"
+        amount:
+          type: "integer"
+        method:
+          $ref: "#/components/schemas/PaymentMethod"
+    TicketSale:
+      description: "A collection of tickets that are paid and used at once."
+      type: "object"
+      properties:
+        uuid:
+          type: "string"
+          format: "uuid"
+        issuedBy:
+          type: "string"
+          format: "uuid"
+        issuedAt:
+          type: "string"
+          format: "date-time"
+        returnValid:
+          type: "boolean"
+          nullable: true
+        from:
+          $ref: "#/components/schemas/MachineLocation"
+        payment:
+          $ref: "#/components/schemas/Payment"
+        positions:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/Position"
+        signature:
+          type: "string"
+    Position:
+      type: "object"
+      properties:
+        fare:
+          $ref: "#/components/schemas/Fare"
+        count:
+          type: "integer"
+    TicketClass:
+      type: "object"
+      properties:
+        bicycle:
+          description: "whether or not a bicycle was carried"
+          type: "boolean"
+        return:
+          description: "whether or not a return trip has been purchased"
+          type: "boolean"
+        reduced:
+          description: "reduced fare for physically disabled persons and children under the age of 14"
+          type: "boolean"
+        staff:
+          description: "only for staff members"
+          type: "boolean"
+    TopUp:
+      type: "object"
+      properties:
+        uuid:
+          type: "string"
+          format: "uuid"
+        for:
+          description: "UUID of the FaehrCard the TopUp is for."
+          type: "string"
+          format: "uuid"
+        issuedAt:
+          type: "string"
+          format: "date-time"
+        issuedBy:
+          description: "The id of the vending machine that the topup has been purchased at. Is null if purchased online"
+          type: "string"
+          format: "uuid"
+        amount:
+          type: "integer"
+        paid:
+          type: "integer"
+        payment:
+          $ref: "#/components/schemas/Payment"
+        initial:
+          description: "Describes whether the top up was done when the card was issued"
+          type: "boolean"
+        signature:
+          type: "string"
+    StaffMember:
+      description: "Staff members work for the ferry and are granted free rides."
+      type: "object"
+      properties:
+        uuid:
+          type: "string"
+          format: "uuid"
+        firstName:
+          type: "string"
+        lastName:
+          type: "string"
+        role:
+          $ref: "#/components/schemas/StaffRole"
+    StaffRole:
+      type: "string"
+      enum:
+        - Admin
+        - Captain
+        - Cashier
+        - other
+    FaehrCard:
+      type: "object"
+      properties:
+        uuid:
+          type: "string"
+          format: "uuid"
+        ownedBy:
+          type: "string"
+          format: "uuid"
+          nullable: true
+        balance:
+          type: "integer"
+        issuedAt:
+          type: "string"
+          format: "date-time"
+        issuedBy:
+          type: "string"
+          format: "uuid"
+          nullable: true
+    MachineConfiguration:
+      description: "Object to hold configuration for vending machines, data that can be changed by admins"
+      type: "object"
+      properties:
+        forMachine:
+          description: "The machine id for which to apply these settings. May be left empty in a POST request if applicable for all machines."
+          type: "string"
+          format: "uuid"
+        maxBicycles:
+          type: "integer"
+        maxBicyclesTolerance:
+          description: "Tolerance fot the maximal amount of passengers carrying a bicycle in the waiting area. This will determine, to what extend the maximum may be exceeded in some situations."
+          type: "integer"
+        maxPassengers:
+          type: "integer"
+        maxPassengersTolerance:
+          description: "Tolerance fot the maximal amount of passengers in the waiting area. This will determine, to what extend the maximum may be exceeded in some situations."
+          type: "integer"
+        fares:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/Fare"
+    Fare:
+      description: "The price that tickets of a given ticket class are sold for (in cents)"
+      type: "object"
+      properties:
+        ticketClass:
+          $ref: "#/components/schemas/TicketClass"
+        fare:
+          type: "integer"
+    MachineCommand:
+      description: "An order issued by an admin for a machine to perform an action"
+      type: "string"
+      enum:
+        - setSignalRed
+        - setSignalGreen
+        - stopVending
+        - startVending
+    MachineLocation:
+      type: "string"
+      enum:
+        - Bislich
+        - Xanten
+    VendingMachine:
+      type: "object"
+      properties:
+        uuid:
+          type: "string"
+          format: "uuid"
+        publicKey:
+          type: "string"
+        location:
+          $ref: "#/components/schemas/MachineLocation"
+    MachineStatus:
+      description: "The status of a machine, generated partly by the backend"
+      type: "object"
+      properties:
+        vending:
+          type: "boolean"
+        batteryCharge:
+          type: "number"
+        estimatedReceiptPaperFillLevel:
+          type: "number"
+          example: 0.98
+        receiptPaperRollLength:
+          type: "integer"
+          example: 50
+        cpuTemperature:
+          type: "number"
+        ticketsSoldToday:
+          type: "object"
+          properties:
+            withBicycle:
+              type: "integer"
+            withoutBicycle:
+              type: "integer"
+        volumeOfSalesToday:
+          type: "integer"
+        waiting:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/WaitingPassenger"
+    WaitingPassenger:
+      description: "A passenger waiting in the waiting area"
+      type: "object"
+      properties:
+        ticketClass:
+          $ref: "#/components/schemas/TicketClass"
+        waitingSince:
+          type: "string"
+          format: "date-time"
