@@ -1,26 +1,24 @@
-import { MongoClient } from 'mongodb';
-import * as assert from 'assert';
+import * as mongoose from 'mongoose';
 
 const logger = require('../logger');
 const config = require('../config');
 
 class Database {
-  private readonly _client: MongoClient;
+  private  _client;
 
   constructor() {
-    this._client = new MongoClient(config.DB_URL);
-    this.connectionTest();
+    this._client = mongoose.connect(config.DB_URL, { useNewUrlParser: true, useUnifiedTopology: true })
+    this.testConnection();
   }
 
-  private connectionTest(): void {
-    this._client.connect( function (err) {
-      assert.equal(null, err);
-      logger.info('Connected succesfully to mongodb');
-    });
-    this._client.close();
+  private testConnection() {
+    this._client.on('error', console.error.bind(console, 'connection error mongo db'))
+    this._client.once('open', function () {
+      console.log('Succesfull connected to database')
+    })
   }
 
-  get client(): MongoClient {
+  get client() {
     return this._client;
   }
 }

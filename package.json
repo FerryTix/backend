@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "api:generate": "openapi-generator-cli generate -i openapi.yaml -g nodejs-express-server -o src/generated/openapi",
+    "api:generate": "openapi-generator-cli generate -i openapi.yaml -g typescript -o src/generated/openapi",
     "nodemon-dev": "nodemon src/index.ts"
   },
   "repository": {
@@ -26,6 +26,7 @@
     "express": "^4.16.4",
     "express-openapi-validator": "^3.9.1",
     "js-yaml": "^3.3.0",
+    "mongoose": "^5.12.3",
     "ono": "^5.0.1",
     "openapi-sampler": "^1.0.0-beta.15",
     "swagger-ui-express": "^4.0.2",

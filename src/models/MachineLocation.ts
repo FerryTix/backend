@@ -11,3 +11,7 @@
  */
 
 export type MachineLocation = 'Bislich' | 'Xanten';
+
+const MachineLocation = new mongoose.Schema({
+  name: String
+})

@@ -1,6 +1,10 @@
 const config = require('./config');
 const logger = require('./logger');
 const ExpressServer = require('./expressServer');
+const db = require('./utils/database')
+
+const mongoose = require('mongoose');
+mongoose.connect(config.DB_URL, { useNewUrlParser: true, useUnifiedTopology: true })
 
 const launchServer = async () => {
     try {
@@ -14,3 +18,4 @@ const launchServer = async () => {
 };
 
 launchServer().catch(e => logger.error(e));
+
