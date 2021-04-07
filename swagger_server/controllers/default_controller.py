@@ -12,6 +12,9 @@ from swagger_server.models.top_up import TopUp  # noqa: E501
 from swagger_server.models.vending_machine import VendingMachine  # noqa: E501
 from swagger_server import util
 
+from swagger_server.dao import vending_machine_dao as VendingMachineDao
+from swagger_server.dao import faehrcard_dao as FaehrcardDao
+
 
 def faehr_card_uuid_balance_get(uuid):  # noqa: E501
     """faehr_card_uuid_balance_get
@@ -23,7 +26,7 @@ def faehr_card_uuid_balance_get(uuid):  # noqa: E501
 
     :rtype: InlineResponse200
     """
-    return 'do some magic!'
+    return FaehrcardDao.find_balance_by_uuid(uuid)
 
 
 def faehr_card_uuid_get(uuid):  # noqa: E501
@@ -36,7 +39,7 @@ def faehr_card_uuid_get(uuid):  # noqa: E501
 
     :rtype: FaehrCard
     """
-    return 'do some magic!'
+    return FaehrcardDao.find_by_uuid(uuid)
 
 
 def faehr_card_uuid_topup_post(body, uuid):  # noqa: E501
@@ -79,7 +82,7 @@ def machines_get():  # noqa: E501
 
     :rtype: List[VendingMachine]
     """
-    return 'do some magic!'
+    return VendingMachineDao.get_all_machines()
 
 
 def machines_uuid_commands_get(uuid):  # noqa: E501
