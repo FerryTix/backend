@@ -1,0 +1,32 @@
+# coding: utf-8
+
+# flake8: noqa
+from __future__ import absolute_import
+# import models into model package
+from swagger_server.models.bank_transfer_payment import BankTransferPayment
+from swagger_server.models.cash_payment import CashPayment
+from swagger_server.models.ec_card_payment import ECCardPayment
+from swagger_server.models.faehr_card import FaehrCard
+from swagger_server.models.faehr_card_payment import FaehrCardPayment
+from swagger_server.models.fare import Fare
+from swagger_server.models.inline_response200 import InlineResponse200
+from swagger_server.models.inline_response201 import InlineResponse201
+from swagger_server.models.machine_command import MachineCommand
+from swagger_server.models.machine_configuration import MachineConfiguration
+from swagger_server.models.machine_location import MachineLocation
+from swagger_server.models.machine_status import MachineStatus
+from swagger_server.models.machine_status_tickets_sold_today import MachineStatusTicketsSoldToday
+from swagger_server.models.one_of_machine_command import OneOfMachineCommand
+from swagger_server.models.one_of_payment_method import OneOfPaymentMethod
+from swagger_server.models.pay_pal_payment import PayPalPayment
+from swagger_server.models.payment import Payment
+from swagger_server.models.payment_method import PaymentMethod
+from swagger_server.models.position import Position
+from swagger_server.models.refill_paper_roll_command import RefillPaperRollCommand
+from swagger_server.models.staff_member import StaffMember
+from swagger_server.models.staff_role import StaffRole
+from swagger_server.models.ticket_class import TicketClass
+from swagger_server.models.ticket_sale import TicketSale
+from swagger_server.models.top_up import TopUp
+from swagger_server.models.vending_machine import VendingMachine
+from swagger_server.models.waiting_passenger import WaitingPassenger
