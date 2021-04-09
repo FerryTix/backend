@@ -19,7 +19,7 @@ def main():
     if APP_MODE == 'PROD':
         app.run(
             port=int(APP_PORT),
-            #ssl_context=(APP_SSL_CERTIFICATE, APP_SSL_KEY)
+            ssl_context=(APP_SSL_CERTIFICATE, APP_SSL_KEY)
         )
     else:
         app.run(port=8080)

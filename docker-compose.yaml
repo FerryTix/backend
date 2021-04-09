@@ -3,6 +3,7 @@ version: '3.8'
 services:
   mongodb:
     image: bitnami/mongodb:latest
+    restart: always
     ports:
       - ${MONGODB_PORT}:${MONGODB_PORT}
     volumes:
@@ -15,6 +16,7 @@ services:
   ferrytix:
     container_name: ferrytix_api
     image: ferrytix_api
+    restart: always
     build: .
     ports:
       - ${APP_PORT}:${APP_PORT}
