@@ -5,7 +5,7 @@ from pymongo.collection import Collection
 from swagger_server.models import FaehrCard
 from swagger_server import database as db
 
-faehrcard_db: Collection = db.mongo.faehrtrade.faehrcard
+faehrcard_db: Collection = db.mongo.ferrytix.faehrcard
 
 
 def find_by_uuid(uuid: str) -> Optional[FaehrCard]:

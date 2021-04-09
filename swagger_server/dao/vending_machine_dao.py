@@ -7,7 +7,7 @@ from swagger_server import database as db
 
 from uuid import uuid4
 
-vending_machine_db: Collection = db.mongo.faehrtrade.vendingmachine
+vending_machine_db: Collection = db.mongo.ferrytix.vendingmachine
 
 
 def get_all_machines() -> Optional[List[VendingMachine]]:
