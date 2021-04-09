@@ -24,7 +24,7 @@ services:
       - mongodb
     volumes:
       - ${HOST_SSL_CERTIFICATE}:${APP_SSL_CERTIFICATE}
-      - ${HOST_SSL_KEY}:${APP_SSL_CERTIFICATE}
+      - ${HOST_SSL_KEY}:${APP_SSL_KEY}
     environment:
       - DATABASE_URL=mongodb://${MONGODB_USERNAME}:${MONGODB_PASSWORD}@mongodb:${MONGODB_PORT}/${MONGODB_DATABASE}
       - APP_SSL_CERTIFICATE=${APP_SSL_CERTIFICATE}
