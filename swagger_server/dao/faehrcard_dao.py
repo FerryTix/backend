@@ -10,6 +10,7 @@ faehrcard_db: Collection = db.mongo.faehrtrade.faehrcard
 
 def find_by_uuid(uuid: str) -> Optional[FaehrCard]:
     result = faehrcard_db.find_one({"uuid": uuid})
+
     if result:
         return FaehrCard(**db.remove_mongo_object_id(result))
     else:

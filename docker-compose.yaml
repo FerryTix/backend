@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: bitnami/mongodb:latest
+    ports:
+      - ${MONGODB_PORT}:${MONGODB_PORT}
+    volumes:
+      - mongodb_data_ferrytix:/bitnami/mongodb
+    environment:
+      - MONGODB_DATABASE=${MONGODB_DATABASE}
+      - MONGODB_USERNAME=${MONGODB_USERNAME}
+      - MONGODB_PASSWORD=${MONGODB_PASSWORD}
+      - MONGODB_PORT_NUMBER=${MONGODB_PORT}
+  ferrytix:
+    container_name: ferrytix_api
+    image: ferrytix_api
+    build: .
+    ports:
+      - ${APP_PORT}:${APP_PORT}
+    depends_on:
+      - mongodb
+    environment:
+      - DATABASE_URL=mongodb://${MONGODB_USERNAME}:${MONGODB_PASSWORD}@mongodb:${MONGODB_PORT}/${MONGODB_DATABASE}
+      - APP_SSL_CERTIFICATE=${APP_SSL_CERTIFICATE}
+      - APP_SSL_KEY=${APP_SSL_KEY}
+      - APP_PORT=${APP_PORT}
+      - APP_MODE=${APP_MODE}
+      - SECRET=${SECRET}
+
+
+volumes:
+  mongodb_data_faehrtrade:

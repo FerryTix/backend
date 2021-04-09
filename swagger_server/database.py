@@ -1,6 +1,7 @@
 import os
+
 import pymongo
-from bson import ObjectId, UuidRepresentation
+from bson import ObjectId
 
 mongo = pymongo.MongoClient(
     os.getenv("DATABASE_URL"),

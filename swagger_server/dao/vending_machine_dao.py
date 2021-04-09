@@ -17,5 +17,13 @@ def get_all_machines() -> Optional[List[VendingMachine]]:
     return machine_list
 
 
+def find_machine_my_uuid(uuid: str) -> Optional[VendingMachine]:
+    result = vending_machine_db.find({uuid: uuid})
+    if result:
+        return VendingMachine(**db.remove_mongo_object_id(result))
+    else:
+        return None
+
+
 def get_uuid():
     print(uuid4())

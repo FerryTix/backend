@@ -142,7 +142,7 @@ def machines_uuid_get(uuid):  # noqa: E501
 
     :rtype: VendingMachine
     """
-    return 'do some magic!'
+    return VendingMachineDao.find_machine_my_uuid(uuid)
 
 
 def machines_uuid_status_get(uuid):  # noqa: E501
