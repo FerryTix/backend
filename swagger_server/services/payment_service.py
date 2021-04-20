@@ -30,7 +30,6 @@
 #["FährCard", "Cash", "ECCard", "BankTransfer", "PayPal"]
 from uuid import uuid4
 
-from dataclasses import asdict
 from typing import Optional
 
 from swagger_server.models import FaehrCardPayment, TicketSaleFaehrCard, TicketSaleCash, CashPayment
