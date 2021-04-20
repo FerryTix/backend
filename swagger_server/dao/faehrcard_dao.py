@@ -1,3 +1,4 @@
+from pymongo.results import UpdateResult
 from typing import Optional, List
 
 from pymongo.collection import Collection
@@ -30,3 +31,9 @@ def find_balance_by_uuid(uuid: str) -> Optional[FaehrCard]:
         return result
     else:
         return None
+
+
+def update(faehrcard: FaehrCard) -> bool:
+    values = faehrcard.to_dict()
+    result: UpdateResult = faehrcard_db.update_one({"uuid": faehrcard.uuid}, {"$set": values})
+    return result.matched_count == 1

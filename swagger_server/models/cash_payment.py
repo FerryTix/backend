@@ -6,6 +6,7 @@ from datetime import date, datetime  # noqa: F401
 from typing import List, Dict  # noqa: F401
 
 from swagger_server.models.base_model_ import Model
+from swagger_server.models.payment import Payment  # noqa: F401,E501
 from swagger_server import util
 
 
@@ -14,25 +15,30 @@ class CashPayment(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, denominations: List[int]=None, change: List[int]=None):  # noqa: E501
+    def __init__(self, denominations: List[int]=None, change: List[int]=None, payment: Payment=None):  # noqa: E501
         """CashPayment - a model defined in Swagger
 
         :param denominations: The denominations of this CashPayment.  # noqa: E501
         :type denominations: List[int]
         :param change: The change of this CashPayment.  # noqa: E501
         :type change: List[int]
+        :param payment: The payment of this CashPayment.  # noqa: E501
+        :type payment: Payment
         """
         self.swagger_types = {
             'denominations': List[int],
-            'change': List[int]
+            'change': List[int],
+            'payment': Payment
         }
 
         self.attribute_map = {
             'denominations': 'denominations',
-            'change': 'change'
+            'change': 'change',
+            'payment': 'payment'
         }
         self._denominations = denominations
         self._change = change
+        self._payment = payment
 
     @classmethod
     def from_dict(cls, dikt) -> 'CashPayment':
@@ -90,3 +96,24 @@ class CashPayment(Model):
         """
 
         self._change = change
+
+    @property
+    def payment(self) -> Payment:
+        """Gets the payment of this CashPayment.
+
+
+        :return: The payment of this CashPayment.
+        :rtype: Payment
+        """
+        return self._payment
+
+    @payment.setter
+    def payment(self, payment: Payment):
+        """Sets the payment of this CashPayment.
+
+
+        :param payment: The payment of this CashPayment.
+        :type payment: Payment
+        """
+
+        self._payment = payment

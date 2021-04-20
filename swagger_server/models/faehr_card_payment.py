@@ -6,6 +6,7 @@ from datetime import date, datetime  # noqa: F401
 from typing import List, Dict  # noqa: F401
 
 from swagger_server.models.base_model_ import Model
+from swagger_server.models.payment import Payment  # noqa: F401,E501
 from swagger_server import util
 
 
@@ -14,20 +15,25 @@ class FaehrCardPayment(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, uuid: str=None):  # noqa: E501
+    def __init__(self, uuid: str=None, payment: Payment=None):  # noqa: E501
         """FaehrCardPayment - a model defined in Swagger
 
         :param uuid: The uuid of this FaehrCardPayment.  # noqa: E501
         :type uuid: str
+        :param payment: The payment of this FaehrCardPayment.  # noqa: E501
+        :type payment: Payment
         """
         self.swagger_types = {
-            'uuid': str
+            'uuid': str,
+            'payment': Payment
         }
 
         self.attribute_map = {
-            'uuid': 'uuid'
+            'uuid': 'uuid',
+            'payment': 'payment'
         }
         self._uuid = uuid
+        self._payment = payment
 
     @classmethod
     def from_dict(cls, dikt) -> 'FaehrCardPayment':
@@ -62,3 +68,24 @@ class FaehrCardPayment(Model):
         """
 
         self._uuid = uuid
+
+    @property
+    def payment(self) -> Payment:
+        """Gets the payment of this FaehrCardPayment.
+
+
+        :return: The payment of this FaehrCardPayment.
+        :rtype: Payment
+        """
+        return self._payment
+
+    @payment.setter
+    def payment(self, payment: Payment):
+        """Sets the payment of this FaehrCardPayment.
+
+
+        :param payment: The payment of this FaehrCardPayment.
+        :type payment: Payment
+        """
+
+        self._payment = payment

@@ -6,7 +6,6 @@ from datetime import date, datetime  # noqa: F401
 from typing import List, Dict  # noqa: F401
 
 from swagger_server.models.base_model_ import Model
-from swagger_server.models.payment_method import PaymentMethod  # noqa: F401,E501
 from swagger_server import util
 
 
@@ -15,7 +14,7 @@ class Payment(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, uuid: str=None, amount: int=None, method: PaymentMethod=None):  # noqa: E501
+    def __init__(self, uuid: str=None, amount: int=None, method: str=None):  # noqa: E501
         """Payment - a model defined in Swagger
 
         :param uuid: The uuid of this Payment.  # noqa: E501
@@ -23,12 +22,12 @@ class Payment(Model):
         :param amount: The amount of this Payment.  # noqa: E501
         :type amount: int
         :param method: The method of this Payment.  # noqa: E501
-        :type method: PaymentMethod
+        :type method: str
         """
         self.swagger_types = {
             'uuid': str,
             'amount': int,
-            'method': PaymentMethod
+            'method': str
         }
 
         self.attribute_map = {
@@ -94,22 +93,28 @@ class Payment(Model):
         self._amount = amount
 
     @property
-    def method(self) -> PaymentMethod:
+    def method(self) -> str:
         """Gets the method of this Payment.
 
 
         :return: The method of this Payment.
-        :rtype: PaymentMethod
+        :rtype: str
         """
         return self._method
 
     @method.setter
-    def method(self, method: PaymentMethod):
+    def method(self, method: str):
         """Sets the method of this Payment.
 
 
         :param method: The method of this Payment.
-        :type method: PaymentMethod
+        :type method: str
         """
+        allowed_values = ["FährCard", "Cash", "ECCard", "BankTransfer", "PayPal"]  # noqa: E501
+        if method not in allowed_values:
+            raise ValueError(
+                "Invalid value for `method` ({0}), must be one of {1}"
+                .format(method, allowed_values)
+            )
 
         self._method = method

@@ -11,7 +11,6 @@ from swagger_server.models.inline_response201 import InlineResponse201  # noqa: 
 from swagger_server.models.machine_command import MachineCommand  # noqa: E501
 from swagger_server.models.machine_configuration import MachineConfiguration  # noqa: E501
 from swagger_server.models.machine_status import MachineStatus  # noqa: E501
-from swagger_server.models.ticket_sale import TicketSale  # noqa: E501
 from swagger_server.models.top_up import TopUp  # noqa: E501
 from swagger_server.models.vending_machine import VendingMachine  # noqa: E501
 from swagger_server.test import BaseTestCase
@@ -151,20 +150,6 @@ class TestDefaultController(BaseTestCase):
         response = self.client.open(
             '/machines/{uuid}/status'.format(uuid='38400000-8cf0-11bd-b23e-10b96e4ef00d'),
             method='PATCH',
-            data=json.dumps(body),
-            content_type='application/json')
-        self.assert200(response,
-                       'Response body is : ' + response.data.decode('utf-8'))
-
-    def test_ticket_sales_post(self):
-        """Test case for ticket_sales_post
-
-        
-        """
-        body = TicketSale()
-        response = self.client.open(
-            '/ticketSales',
-            method='POST',
             data=json.dumps(body),
             content_type='application/json')
         self.assert200(response,

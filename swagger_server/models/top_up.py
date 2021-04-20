@@ -6,7 +6,7 @@ from datetime import date, datetime  # noqa: F401
 from typing import List, Dict  # noqa: F401
 
 from swagger_server.models.base_model_ import Model
-from swagger_server.models.payment import Payment  # noqa: F401,E501
+from swagger_server.models.faehr_card_payment import FaehrCardPayment  # noqa: F401,E501
 from swagger_server import util
 
 
@@ -15,7 +15,7 @@ class TopUp(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, uuid: str=None, _for: str=None, issued_at: datetime=None, issued_by: str=None, amount: int=None, paid: int=None, payment: Payment=None, initial: bool=None, sale_counter: int=None, signature: str=None):  # noqa: E501
+    def __init__(self, uuid: str=None, _for: str=None, issued_at: datetime=None, issued_by: str=None, amount: int=None, paid: int=None, payment: FaehrCardPayment=None, initial: bool=None, sale_counter: int=None, signature: str=None):  # noqa: E501
         """TopUp - a model defined in Swagger
 
         :param uuid: The uuid of this TopUp.  # noqa: E501
@@ -31,7 +31,7 @@ class TopUp(Model):
         :param paid: The paid of this TopUp.  # noqa: E501
         :type paid: int
         :param payment: The payment of this TopUp.  # noqa: E501
-        :type payment: Payment
+        :type payment: FaehrCardPayment
         :param initial: The initial of this TopUp.  # noqa: E501
         :type initial: bool
         :param sale_counter: The sale_counter of this TopUp.  # noqa: E501
@@ -46,7 +46,7 @@ class TopUp(Model):
             'issued_by': str,
             'amount': int,
             'paid': int,
-            'payment': Payment,
+            'payment': FaehrCardPayment,
             'initial': bool,
             'sale_counter': int,
             'signature': str
@@ -217,22 +217,22 @@ class TopUp(Model):
         self._paid = paid
 
     @property
-    def payment(self) -> Payment:
+    def payment(self) -> FaehrCardPayment:
         """Gets the payment of this TopUp.
 
 
         :return: The payment of this TopUp.
-        :rtype: Payment
+        :rtype: FaehrCardPayment
         """
         return self._payment
 
     @payment.setter
-    def payment(self, payment: Payment):
+    def payment(self, payment: FaehrCardPayment):
         """Sets the payment of this TopUp.
 
 
         :param payment: The payment of this TopUp.
-        :type payment: Payment
+        :type payment: FaehrCardPayment
         """
 
         self._payment = payment

@@ -1,19 +1,21 @@
 import connexion
 import six
 
+from swagger_server.models import TicketSaleFaehrCard, TicketSaleECCard, TicketSaleCash
 from swagger_server.models.faehr_card import FaehrCard  # noqa: E501
 from swagger_server.models.inline_response200 import InlineResponse200  # noqa: E501
 from swagger_server.models.inline_response201 import InlineResponse201  # noqa: E501
 from swagger_server.models.machine_command import MachineCommand  # noqa: E501
 from swagger_server.models.machine_configuration import MachineConfiguration  # noqa: E501
 from swagger_server.models.machine_status import MachineStatus  # noqa: E501
-from swagger_server.models.ticket_sale import TicketSale  # noqa: E501
 from swagger_server.models.top_up import TopUp  # noqa: E501
 from swagger_server.models.vending_machine import VendingMachine  # noqa: E501
 from swagger_server import util
 
 from swagger_server.dao import vending_machine_dao as VendingMachineDao
 from swagger_server.dao import faehrcard_dao as FaehrcardDao
+
+from swagger_server.services import payment_service as PaymentService
 
 
 def faehr_card_uuid_balance_get(uuid):  # noqa: E501
@@ -175,19 +177,49 @@ def machines_uuid_status_patch(body, uuid):  # noqa: E501
     return 'do some magic!'
 
 
-def ticket_sales_post(body):  # noqa: E501
-    """ticket_sales_post
+def ticket_sales_cash_post(body):  # noqa: E501
+    """ticket_sales_cash_post
 
     Add a ticket sale. # noqa: E501
 
-    :param body: 
+    :param body:
     :type body: dict | bytes
 
     :rtype: None
     """
     if connexion.request.is_json:
-        body = TicketSale.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+        body = TicketSaleCash.from_dict(connexion.request.get_json())  # noqa: E501
+    return PaymentService.create_ticket_sale_cash(body)
+
+
+def ticket_sales_ec_post(body):  # noqa: E501
+    """ticket_sales_ec_post
+
+    Add a ticket sale. # noqa: E501
+
+    :param body:
+    :type body: dict | bytes
+
+    :rtype: None
+    """
+    if connexion.request.is_json:
+        body = TicketSaleECCard.from_dict(connexion.request.get_json())  # noqa: E501
+    return 'PaymentService.create_ticket_sale_ec(body)'
+
+
+def ticket_sales_faehrcard_post(body):  # noqa: E501
+    """ticket_sales_faehrcard_post
+
+    Add a ticket sale. # noqa: E501
+
+    :param body:
+    :type body: dict | bytes
+
+    :rtype: None
+    """
+    if connexion.request.is_json:
+        body = TicketSaleFaehrCard.from_dict(connexion.request.get_json())  # noqa: E501
+    return PaymentService.create_ticket_sale_faehrcard(body)
 
 
 def ticket_sales_uuid_invalidate_return_delete(uuid):  # noqa: E501

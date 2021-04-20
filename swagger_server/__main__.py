@@ -22,7 +22,7 @@ def main():
             ssl_context=(APP_SSL_CERTIFICATE, APP_SSL_KEY)
         )
     else:
-        app.run(port=8080)
+        app.run(port=8090)
 
 
 if __name__ == '__main__':

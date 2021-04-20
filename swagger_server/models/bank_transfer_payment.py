@@ -6,6 +6,7 @@ from datetime import date, datetime  # noqa: F401
 from typing import List, Dict  # noqa: F401
 
 from swagger_server.models.base_model_ import Model
+from swagger_server.models.payment import Payment  # noqa: F401,E501
 from swagger_server import util
 
 
@@ -14,20 +15,25 @@ class BankTransferPayment(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, name: str=None):  # noqa: E501
+    def __init__(self, name: str=None, payment: Payment=None):  # noqa: E501
         """BankTransferPayment - a model defined in Swagger
 
         :param name: The name of this BankTransferPayment.  # noqa: E501
         :type name: str
+        :param payment: The payment of this BankTransferPayment.  # noqa: E501
+        :type payment: Payment
         """
         self.swagger_types = {
-            'name': str
+            'name': str,
+            'payment': Payment
         }
 
         self.attribute_map = {
-            'name': 'name'
+            'name': 'name',
+            'payment': 'payment'
         }
         self._name = name
+        self._payment = payment
 
     @classmethod
     def from_dict(cls, dikt) -> 'BankTransferPayment':
@@ -60,3 +66,24 @@ class BankTransferPayment(Model):
         """
 
         self._name = name
+
+    @property
+    def payment(self) -> Payment:
+        """Gets the payment of this BankTransferPayment.
+
+
+        :return: The payment of this BankTransferPayment.
+        :rtype: Payment
+        """
+        return self._payment
+
+    @payment.setter
+    def payment(self, payment: Payment):
+        """Sets the payment of this BankTransferPayment.
+
+
+        :param payment: The payment of this BankTransferPayment.
+        :type payment: Payment
+        """
+
+        self._payment = payment
