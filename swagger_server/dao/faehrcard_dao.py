@@ -15,7 +15,7 @@ def find_by_uuid(uuid: str) -> Optional[FaehrCard]:
     if result:
         return FaehrCard(**db.remove_mongo_object_id(result))
     else:
-        return None
+        return 'no FaehrCard with given uuid found', 404
 
 
 def find_balance_by_uuid(uuid: str) -> Optional[FaehrCard]:
@@ -30,7 +30,7 @@ def find_balance_by_uuid(uuid: str) -> Optional[FaehrCard]:
 
         return result
     else:
-        return None
+        return 'no FaehrCard with given uuid found', 404
 
 
 def update(faehrcard: FaehrCard) -> bool:

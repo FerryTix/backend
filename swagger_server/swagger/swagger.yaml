@@ -415,14 +415,6 @@ components:
           format: uuid
         amount:
           type: integer
-        method:
-          type: string
-          enum:
-          - FährCard
-          - Cash
-          - ECCard
-          - BankTransfer
-          - PayPal
       description: A payment for a ticket sale.
     TicketSaleFaehrCard:
       type: object
@@ -570,7 +562,7 @@ components:
         uuid:
           type: string
           format: uuid
-        for:
+        card:
           type: string
           description: UUID of the FaehrCard the TopUp is for.
           format: uuid
@@ -587,7 +579,7 @@ components:
         paid:
           type: integer
         payment:
-          $ref: '#/components/schemas/FaehrCardPayment'
+          $ref: '#/components/schemas/CashPayment'
         initial:
           type: boolean
           description: Describes whether the top up was done when the card was issued

@@ -58,7 +58,7 @@ def faehr_card_uuid_topup_post(body, uuid):  # noqa: E501
     """
     if connexion.request.is_json:
         body = TopUp.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+    return PaymentService.top_up_faehrcard(body)
 
 
 def machines_default_config_patch(body):  # noqa: E501

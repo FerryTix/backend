@@ -22,7 +22,7 @@ def find_machine_my_uuid(uuid: str) -> Optional[VendingMachine]:
     if result:
         return VendingMachine(**db.remove_mongo_object_id(result))
     else:
-        return None
+        return "no machine with given uuid found", 404
 
 
 def get_uuid():
